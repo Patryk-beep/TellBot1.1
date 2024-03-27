@@ -1,9 +1,33 @@
-/* Updated Color Palette and Fonts */
 body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     background: linear-gradient(180deg, #294691, #7099ca, #d4edff);
+    height: 100vh;
+    transition: background-color 0.3s ease;
+}
+
+.light-theme {
+    background: linear-gradient(180deg, #294691, #7099ca, #d4edff);
+}
+
+.dark-theme {
+    background: linear-gradient(180deg, #1a2035, #2e3951, #5a6c80);
+}
+
+.chat-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.theme-switcher {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .chat-container {
@@ -216,6 +240,4 @@ body.dark-mode {
     background-color: #556272;
 }
 
-.dark-mode {
-    background: linear-gradient(180deg, #1b2c48, #405d80, #6a8fb3);
-}
+
