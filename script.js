@@ -14,20 +14,17 @@ function sendMessage(message) {
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    // Assuming your Netlify function is named 'chat'
+    const messageData = { message: message };
+    console.log("Sending message:", messageData);
+
     fetch('/.netlify/functions/chat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ message })
+        body: JSON.stringify(messageData)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
         const generatedText = data.reply;
         const replyElement = createMessageElement(generatedText, 'other-user');
