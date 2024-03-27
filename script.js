@@ -14,23 +14,15 @@ function sendMessage(message) {
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    fetch('https://api.openai.com/v1/chat/completions', {
+    fetch('/.netlify/functions/chat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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' // Replace with your actual OpenAI API Key
+            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
         },
-        body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: message }]
-        })
+        body: JSON.stringify({ messages: [{ role: "user", content: message }] })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
         const generatedText = data.choices[0].message.content;
         const replyElement = createMessageElement(generatedText, 'other-user');
