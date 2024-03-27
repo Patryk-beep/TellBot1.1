@@ -8,28 +8,22 @@ function createMessageElement(message, sender) {
     return messageDiv;
 }
 
-function sendMessage(userMessage) {
+function sendMessage(message) {
     const chatMessages = document.getElementById('chat-messages');
-    const messageElement = createMessageElement(userMessage, 'current-user');
+    const messageElement = createMessageElement(message, 'current-user');
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    // Prepare the request body
-    const requestBody = {
-        model: "gpt-3.5-turbo",
-        messages: [
-            { role: "system", content: "You are a helpful assistant." },
-            { role: "user", content: userMessage }
-        ]
-    };
 
     fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+            'Authorization': 'Bearer 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' // Replace with your actual OpenAI API Key
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: message }]
+        })
     })
     .then(response => {
         if (!response.ok) {
@@ -38,7 +32,6 @@ function sendMessage(userMessage) {
         return response.json();
     })
     .then(data => {
-        // Assuming the response structure matches the documentation
         const generatedText = data.choices[0].message.content;
         const replyElement = createMessageElement(generatedText, 'other-user');
         chatMessages.appendChild(replyElement);
