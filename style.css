@@ -1,138 +1,136 @@
+/* Updated Color Palette and Fonts */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    background-color: #eaecef;
 }
 
 .chat-container {
     max-width: 600px;
     margin: 20px auto;
     background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.chat-container:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .chat-header {
-    background-color: #1da1f2;
+    background-color: #4a69bd;
     color: #fff;
-    padding: 10px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2em;
 }
 
 .chat-messages {
     padding: 20px;
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
+    transition: background-color 0.3s ease;
 }
 
 .message {
     display: flex;
-    margin-bottom: 20px;
+    align-items: center;
+    margin-bottom: 10px;
+    animation: slideIn 0.5s ease forwards;
 }
 
-.avatar {
-    margin-right: 10px;
-}
-
-.avatar img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .message-content {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 5px;
+    background-color: #f4f4f8;
+    padding: 10px 15px;
+    border-radius: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease;
 }
 
 .current-user .message-content {
-    background-color: #1da1f2;
+    background-color: #78a2cc;
     color: #fff;
+    align-self: flex-end;
 }
 
 .chat-input {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    background-color: #f4f4f8;
+    padding: 15px;
     display: flex;
-    align-items: center;
+    border-top: 1px solid #ddd;
 }
 
 .chat-input textarea {
-    width: calc(100% - 80px);
+    flex: 1;
     padding: 10px;
-    border: none;
-    border-radius: 5px;
+    border: 2px solid #ddd;
+    border-radius: 20px;
     resize: none;
-    margin-right: 10px;
+    transition: border-color 0.3s ease;
+}
+
+.chat-input textarea:focus {
+    border-color: #78a2cc;
+    outline: none;
 }
 
 .chat-input button {
-    background-color: #1da1f2;
+    background-color: #4a69bd;
     color: #fff;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
-}
-/* Existing styles */
-
-.chat-input {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    display: flex;
-    align-items: center; /* Align items vertically */
+    margin-left: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
-.chat-input textarea {
-    flex: 1; /* Take up remaining space */
-    width: calc(100% - 80px);
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    resize: none;
-    margin-right: 10px;
+.chat-input button:hover {
+    background-color: #3b5998;
 }
 
-.chat-input button {
-    background-color: #1da1f2;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px; /* Add margin to separate buttons */
-}
-
+/* Additional Styling for Speech-to-Text */
 .speech-to-text {
-    margin-top: 20px;
     display: flex;
-    align-items: center; /* Center items horizontally */
-    justify-content: center; /* Center items horizontally */
-    margin-bottom: 20px; /* Add margin at the bottom of the container */
+    justify-content: center;
+    padding: 20px;
 }
 
 .speech-to-text button {
-    background-color: #1da1f2;
+    background-color: #4a69bd;
     color: #fff;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
-    margin-bottom: 10px; /* Add margin below the button */
+    transition: background-color 0.3s ease;
 }
 
 .speech-to-text button:hover {
-    background-color: #0F81E7;
+    background-color: #3b5998;
 }
 
-.speech-to-text button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.3);
+.output {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f4f4f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    text-align: center;
 }
