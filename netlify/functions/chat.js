@@ -12,14 +12,8 @@ exports.handler = async (event) => {
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
-        {
-          role: "system",
-          content: "You are a helpful assistant."
-        },
-        {
-          role: "user",
-          content: message
-        }
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: message }
       ]
     });
 
