@@ -45,7 +45,6 @@ function sendMessage(message) {
         chatMessages.appendChild(errorMessageElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
-    stopSpeechRecognition();
 }
 
 document.getElementById('send-btn').addEventListener('click', sendInputMessage);
@@ -62,6 +61,7 @@ function sendInputMessage() {
     if (message !== '') {
         sendMessage(message);
         messageInput.value = '';
+        stopSpeechRecognition();
     }
 }
 
@@ -79,7 +79,6 @@ if ('webkitSpeechRecognition' in window) {
     recognition.onstart = function() {
         recognizing = true;
         updateStartButton(true);
-        final_transcript = '';
     };
 
     recognition.onerror = function(event) {
@@ -89,10 +88,7 @@ if ('webkitSpeechRecognition' in window) {
     recognition.onend = function() {
         recognizing = false;
         updateStartButton(false);
-        if (final_transcript) {
-            document.getElementById('message-input').value = final_transcript;
-            sendInputMessage();
-        }
+        document.getElementById('message-input').value = final_transcript;
     };
 
     recognition.onresult = function(event) {
@@ -128,6 +124,7 @@ startButton.addEventListener('click', function() {
     if (recognizing) {
         recognition.stop();
     } else {
+        final_transcript = '';
         recognition.start();
     }
 });
