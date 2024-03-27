@@ -1,15 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const body = document.body;
     const themeToggle = document.getElementById('theme-toggle');
-
-    themeToggle.addEventListener('change', function() {
-        if(this.checked) {
-            body.classList.remove('light-theme');
-            body.classList.add('dark-theme');
-        } else {
-            body.classList.remove('dark-theme');
-            body.classList.add('light-theme');
-        }
+    themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-theme');
+        document.body.classList.toggle('light-theme');
     });
 });
 
@@ -31,9 +24,7 @@ function sendMessage(message) {
 
     fetch('/.netlify/functions/chat', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ message })
     })
     .then(response => {
@@ -56,27 +47,59 @@ function sendMessage(message) {
     });
 }
 
-document.getElementById('send-btn').addEventListener('click', () => {
+document.getElementById('send-btn').addEventListener('click', sendInputMessage);
+document.getElementById('message-input').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendInputMessage();
+    }
+});
+
+function sendInputMessage() {
     const messageInput = document.getElementById('message-input');
     const message = messageInput.value.trim();
     if (message !== '') {
         sendMessage(message);
         messageInput.value = '';
     }
-});
+}
 
-document.getElementById('message-input').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        const messageInput = document.getElementById('message-input');
-        const message = messageInput.value.trim();
-        if (message !== '') {
-            sendMessage(message);
-            messageInput.value = '';
+// Speech-to-text functionality
+let recognition;
+let recognizing = false;
+if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onstart = function() {
+        recognizing = true;
+    };
+
+    recognition.onerror = function(event) {
+        console.error("Speech Recognition Error:", event.error);
+    };
+
+    recognition.onend = function() {
+        recognizing = false;
+    };
+
+    recognition.onresult = function(event) {
+        let final_transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+                final_transcript += event.results[i][0].transcript;
+            }
         }
+        document.getElementById('message-input').value = final_transcript;
+        sendInputMessage();
+    };
+}
+
+document.getElementById('startButton').addEventListener('click', function() {
+    if (recognizing) {
+        recognition.stop();
+        return;
     }
-});
-document.getElementById('theme-toggle').addEventListener('click', function() {
-    document.body.classList.toggle('dark-theme');
-    document.body.classList.toggle('light-theme');
+    recognition.start();
 });
