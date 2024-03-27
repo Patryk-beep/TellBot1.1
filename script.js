@@ -14,7 +14,7 @@ function sendMessage(message) {
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    fetch('https://api.openai.com/v1/chat/completions', {
+    fetch('/.netlify/functions/chat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
