@@ -61,3 +61,6 @@ document.getElementById('message-input').addEventListener('keypress', function (
         }
     }
 });
+document.getElementById('dark-mode-toggle').addEventListener('change', function () {
+    document.body.classList.toggle('dark-mode', this.checked);
+});

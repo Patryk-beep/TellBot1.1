@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twitter Chat with Speech-to-Text</title>
+    <title>TellBot 1.1</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="light-theme">
+    <div class="theme-switcher">
+        <button id="theme-toggle">
+            <img id="theme-icon" src="light-theme-icon.png" alt="Toggle theme">
+        </button>
+    </div>
     <div class="chat-container">
         <div class="chat-header">
             <h2>TellBot 1.1</h2>
@@ -23,7 +30,6 @@
             <div id="output" class="output"></div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
