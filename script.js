@@ -1,3 +1,18 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const body = document.body;
+    const themeToggle = document.getElementById('theme-toggle');
+
+    themeToggle.addEventListener('change', function() {
+        if(this.checked) {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+        } else {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+        }
+    });
+});
+
 function createMessageElement(message, sender) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', sender);
