@@ -1,26 +1,26 @@
-const { Configuration, OpenAIApi } = require("openai");
+const OpenAI = require('openai');
 
 exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body);
-    const openai = new OpenAIApi(new Configuration({ apiKey: process.env.OPENAI_API_KEY }));
+    const message = body.message;
 
-    const response = await openai.createChatCompletion({
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+    const response = await openai.ChatCompletion.create({
       model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: body.message }
-      ]
+      messages: [{ role: "user", content: message }]
     });
 
-    const generatedResponse = response.data.choices[0].message.content.trim();
+    // Extracting the reply from OpenAI's response
+    const reply = response.data.choices[0].message.content;
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ reply: generatedResponse })
+      body: JSON.stringify({ reply: reply })
     };
   } catch (error) {
     console.error('Error:', error);
-    return { statusCode: 500, body: JSON.stringify({ error: error.toString() }) };
+    return { statusCode: 500, body: JSON.stringify({ error: 'An error occurred while processing your request.' }) };
   }
 };
