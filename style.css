@@ -284,5 +284,10 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
+#startButton.recording {
+    background-color: red;
+    /* Other styles for the recording state */
+}
+
 /* Add dark theme styles and rest of your CSS... */
 

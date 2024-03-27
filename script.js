@@ -45,6 +45,7 @@ function sendMessage(message) {
         chatMessages.appendChild(errorMessageElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
+    stopSpeechRecognition();
 }
 
 document.getElementById('send-btn').addEventListener('click', sendInputMessage);
@@ -67,6 +68,9 @@ function sendInputMessage() {
 // Speech-to-text functionality
 let recognition;
 let recognizing = false;
+let final_transcript = '';
+const startButton = document.getElementById('startButton');
+
 if ('webkitSpeechRecognition' in window) {
     recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
@@ -74,6 +78,8 @@ if ('webkitSpeechRecognition' in window) {
 
     recognition.onstart = function() {
         recognizing = true;
+        updateStartButton(true);
+        final_transcript = '';
     };
 
     recognition.onerror = function(event) {
@@ -82,24 +88,46 @@ if ('webkitSpeechRecognition' in window) {
 
     recognition.onend = function() {
         recognizing = false;
+        updateStartButton(false);
+        if (final_transcript) {
+            document.getElementById('message-input').value = final_transcript;
+            sendInputMessage();
+        }
     };
 
     recognition.onresult = function(event) {
-        let final_transcript = '';
+        let interim_transcript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
                 final_transcript += event.results[i][0].transcript;
+            } else {
+                interim_transcript += event.results[i][0].transcript;
             }
         }
-        document.getElementById('message-input').value = final_transcript;
-        sendInputMessage();
+        document.getElementById('message-input').value = final_transcript + interim_transcript;
     };
 }
 
-document.getElementById('startButton').addEventListener('click', function() {
+function updateStartButton(isRecording) {
+    if (isRecording) {
+        startButton.textContent = 'Stop Voice Recording';
+        startButton.classList.add('recording');
+    } else {
+        startButton.textContent = 'Start Voice Input';
+        startButton.classList.remove('recording');
+    }
+}
+
+function stopSpeechRecognition() {
     if (recognizing) {
         recognition.stop();
-        return;
     }
-    recognition.start();
+}
+
+startButton.addEventListener('click', function() {
+    if (recognizing) {
+        recognition.stop();
+    } else {
+        recognition.start();
+    }
 });
