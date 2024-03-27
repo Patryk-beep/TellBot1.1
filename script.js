@@ -17,14 +17,18 @@ function sendMessage(message) {
     fetch('/.netlify/functions/chat', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ messages: [{ role: "user", content: message }] })
+        body: JSON.stringify({ message })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
     .then(data => {
-        const generatedText = data.choices[0].message.content;
+        const generatedText = data.reply;
         const replyElement = createMessageElement(generatedText, 'other-user');
         chatMessages.appendChild(replyElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
