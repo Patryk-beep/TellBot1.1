@@ -61,6 +61,7 @@ function sendInputMessage() {
     if (message !== '') {
         sendMessage(message);
         messageInput.value = '';
+        final_transcript = '';
         stopSpeechRecognition();
     }
 }
@@ -88,7 +89,6 @@ if ('webkitSpeechRecognition' in window) {
     recognition.onend = function() {
         recognizing = false;
         updateStartButton(false);
-        document.getElementById('message-input').value = final_transcript;
     };
 
     recognition.onresult = function(event) {
