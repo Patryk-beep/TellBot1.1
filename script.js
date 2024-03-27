@@ -14,14 +14,20 @@ function sendMessage(message) {
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    fetch('/api/send-message', {
+    // Updated fetch request
+    fetch('/.netlify/functions/chat', { // Ensure this matches your deployed endpoint
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ message })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
     .then(data => {
         const generatedText = data.reply;
         const replyElement = createMessageElement(generatedText, 'other-user');
@@ -30,7 +36,7 @@ function sendMessage(message) {
     })
     .catch(error => {
         console.error("Error:", error);
-        const errorMessageElement = createMessageElement('An error occurred while fetching data.', 'other-user');
+        const errorMessageElement = createMessageElement('An error occurred while fetching data: ' + error.toString(), 'other-user');
         chatMessages.appendChild(errorMessageElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
