@@ -12,16 +12,31 @@ exports.handler = async (event) => {
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
-        { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: message }
+        {
+          role: "system",
+          content: "You are a helpful assistant."
+        },
+        {
+          role: "user",
+          content: message
+        }
       ]
     });
+
+    // Log a more detailed message for easier debugging.
+    console.log("OpenAI response: ", response.data);
 
     return {
       statusCode: 200,
       body: JSON.stringify({ reply: response.data.choices[0].message.content })
     };
   } catch (error) {
-    return { statusCode: 500, body: JSON.stringify({ error: error.toString() }) };
+    const errorMessage = error.message;
+    console.error(`Error in serverless function: ${errorMessage}`);
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: errorMessage })
+    };
   }
 };
