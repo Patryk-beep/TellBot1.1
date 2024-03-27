@@ -8,18 +8,28 @@ function createMessageElement(message, sender) {
     return messageDiv;
 }
 
-function sendMessage(message) {
+function sendMessage(userMessage) {
     const chatMessages = document.getElementById('chat-messages');
-    const messageElement = createMessageElement(message, 'current-user');
+    const messageElement = createMessageElement(userMessage, 'current-user');
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    fetch('/.netlify/functions/chat', {
+    // Prepare the request body
+    const requestBody = {
+        model: "gpt-3.5-turbo",
+        messages: [
+            { role: "system", content: "You are a helpful assistant." },
+            { role: "user", content: userMessage }
+        ]
+    };
+
+    fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
         },
-        body: JSON.stringify({ message })
+        body: JSON.stringify(requestBody)
     })
     .then(response => {
         if (!response.ok) {
@@ -28,7 +38,8 @@ function sendMessage(message) {
         return response.json();
     })
     .then(data => {
-        const generatedText = data.reply;
+        // Assuming the response structure matches the documentation
+        const generatedText = data.choices[0].message.content;
         const replyElement = createMessageElement(generatedText, 'other-user');
         chatMessages.appendChild(replyElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
